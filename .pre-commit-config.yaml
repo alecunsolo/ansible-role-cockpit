@@ -1,0 +1,24 @@
+---
+exclude: ^\.gitignore$
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.4.0
+  hooks:
+  - id: trailing-whitespace
+  - id: check-case-conflict
+  - id: end-of-file-fixer
+  - id: check-executables-have-shebangs
+  - id: check-merge-conflict
+    args:
+    - --assume-in-merge
+  - id: mixed-line-ending
+    args:
+    - --fix=auto
+- repo: https://github.com/adrienverge/yamllint.git
+  rev: v1.31.0
+  hooks:
+  - id: yamllint
+- repo: https://github.com/ansible/ansible-lint.git
+  rev: v6.15.0
+  hooks:
+  - id: ansible-lint

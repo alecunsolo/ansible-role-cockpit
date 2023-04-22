@@ -1,0 +1,23 @@
+---
+galaxy_info:
+  author: Alessandro Cunsolo
+  namespace: alecunsolo
+  description: Install cockpit
+  license: MIT
+  role_name: cockpit
+
+  min_ansible_version: '2.8'
+
+  platforms:
+  - name: Ubuntu
+    versions:
+    - all
+  - name: Debian
+    versions:
+    - all
+  - name: EL
+    versions:
+    - all
+
+  galaxy_tags: []
+dependencies: []
