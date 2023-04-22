@@ -1,2 +1,6 @@
 ---
-# handlers file for cockpit
+- name: Restart cockpit
+  ansible.builtin.systemd:
+    name: '{{ cockpit_service }}'
+    state: restarted
+    daemon_reload: true

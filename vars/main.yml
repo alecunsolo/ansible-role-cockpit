@@ -1,2 +1,8 @@
 ---
-# vars file for cockpit
+cockpit_main_package: cockpit
+cockpit_storage_package: cockpit-storaged
+cockpit_podman_package: cockpit-podman
+cockpit_machines_package: cockpit-machines
+cockpit_service: cockpit.socket
+
+cockpit_zfs_manager_repo: https://github.com/45Drives/cockpit-zfs-manager.git

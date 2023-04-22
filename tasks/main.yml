@@ -1,2 +1,65 @@
 ---
-# tasks file for cockpit
+- name: Ensure cockpit is installed.
+  ansible.builtin.package:
+    name: '{{ cockpit_main_package }}'
+    state: present
+
+- name: Install additional components.
+  ansible.builtin.include_tasks: component.yml
+  loop:
+    - name: '{{ cockpit_storage_package }}'
+      state: '{{ cockpit_storage_enabled | ternary("present", "absent") }}'
+    - name: '{{ cockpit_podman_package }}'
+      state: '{{ cockpit_podman_enabled | ternary("present", "absent") }}'
+    - name: '{{ cockpit_machines_package }}'
+      state: '{{ cockpit_machines_enabled | ternary("present", "absent") }}'
+
+- name: Ensure ZFS management component is installed.
+  when: cockpit_zfs_enabled
+  block:
+    - name: Download cockpit-zfs-manager.
+      ansible.builtin.git:
+        repo: https://github.com/45Drives/cockpit-zfs-manager.git
+        dest: /usr/local/share/cockpit-zfs-manager
+        version: master
+        depth: 1
+
+    - name: Install cockpit-zfs-manager.
+      ansible.posix.synchronize:
+        src: /usr/local/share/cockpit-zfs-manager/zfs
+        dest: /usr/share/cockpit/
+        archive: true
+      delegate_to: '{{ inventory_hostname }}'
+
+- name: Ensure ZFS management component is uninstalled.
+  ansible.builtin.file:
+    dest: '{{ item }}'
+    state: absent
+  when: not cockpit_zfs_enabled
+  loop:
+    - /usr/local/share/cockpit-zfs-manager
+    - /usr/share/cockpit/zfs
+
+- name: Manage systemd override directory.
+  ansible.builtin.file:
+    dest: /etc/systemd/system/cockpit.socket.d
+    state: '{{ cockpit_override_systemd | ternary("directory", "absent") }}'
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Configure cockpit override.
+  ansible.builtin.template:
+    src: '{{ cockpit_override_src }}'
+    dest: /etc/systemd/system/cockpit.socket.d/override.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: cockpit_override_systemd
+  notify: Restart cockpit
+
+- name: Ensure cockpit is enabled and started.
+  ansible.builtin.service:
+    name: '{{ cockpit_service }}'
+    state: started
+    enabled: true

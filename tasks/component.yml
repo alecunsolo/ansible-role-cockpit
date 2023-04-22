@@ -1,0 +1,5 @@
+---
+- name: Ensure cockpit component is installed/removed [{{ item.name }}]
+  ansible.builtin.package:
+    name: '{{ item.name }}'
+    state: '{{ item.state }}'
