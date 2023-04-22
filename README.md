@@ -4,31 +4,62 @@
 Ansible Role: cockpit
 =========
 
-A brief description of the role goes here.
+A role to install [cockpit](https://cockpit-project.org/) on a machine.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+For the installation of the [45Drives](https://github.com/45Drives/cockpit-zfs-manager.git) component `git` and `rsync` are needed.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```yaml
+cockpit_main_package: cockpit
+cockpit_storage_package: cockpit-storaged
+cockpit_podman_package: cockpit-podman
+cockpit_machines_package: cockpit-machines
+cockpit_service: cockpit.socket
+
+cockpit_zfs_manager_repo: https://github.com/45Drives/cockpit-zfs-manager.git
+```
+Self-explanatory variables defined in (vars/main.yml)[vars/main.yml].
+ ```yaml
+cockpit_storage_enabled: true
+cockpit_podman_enabled: false
+cockpit_machines_enabled: false
+cockpit_zfs_enabled: false
+```
+Cockpit packages to be instralled.
+
+```yaml
+cockpit_override_systemd: false
+cockpit_override_src: cockpit-default-override.socket.j2
+```
+This parameters are used to override the system provided `systemd` unit (for example to listen only on one interface). The provided template is empty: to actually override the unit you need to bring your own template.
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+None.
 
 Example Playbook
 ----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```yaml
+---
+- hosts: all
+  vars:
+    cockpit_storage_enabled: true
+    cockpit_podman_enabled: false
+    cockpit_machines_enabled: true
+    cockpit_zfs_enabled: true
+    cockpit_override_src: my_custom_systemd_override.j2
+    override_param_1: my_value
+  tasks:
+    - name: Include cockpit.
+      ansible.builtin.include_role:
+        name: alecunsolo.cockpit
+```
 
 License
 -------
