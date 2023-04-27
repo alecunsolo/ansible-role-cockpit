@@ -2,6 +2,8 @@
 cockpit_storage_enabled: true
 cockpit_podman_enabled: false
 cockpit_machines_enabled: false
+cockpit_packagekit_enabled: true
+cockpit_networkmanager_enabled: false
 cockpit_zfs_enabled: false
 cockpit_override_systemd: false
 cockpit_override_src: cockpit-default-override.socket.j2
