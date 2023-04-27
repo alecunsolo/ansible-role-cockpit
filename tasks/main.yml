@@ -15,8 +15,13 @@
       state: '{{ cockpit_machines_enabled | ternary("present", "absent") }}'
     - name: '{{ cockpit_packagekit_package }}'
       state: '{{ cockpit_packagekit_enabled | ternary("present", "absent") }}'
-    - name: '{{ cockpit_networkmanager_package }}'
-      state: '{{ cockpit_networkmanager_enabled | ternary("present", "absent") }}'
+
+# Networkmanager package is defined only in debian distros
+- name: Ensure cockpit component is installed/removed [{{ cockpit_networkmanager_package }}]
+  ansible.builtin.package:
+    name: '{{ cockpit_networkmanager_package }}'
+    state: '{{ cockpit_networkmanager_enabled | ternary("present", "absent") }}'
+  when: (ansible_os_family | lower) == "debian"
 
 - name: Ensure ZFS management component is installed.
   when: cockpit_zfs_enabled
