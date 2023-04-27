@@ -3,6 +3,8 @@ cockpit_main_package: cockpit
 cockpit_storage_package: cockpit-storaged
 cockpit_podman_package: cockpit-podman
 cockpit_machines_package: cockpit-machines
+cockpit_packagekit_package: cockpit-packagekit
+cockpit_networkmanager_package: cockpit-networkmanager
 cockpit_service: cockpit.socket
 
 cockpit_zfs_manager_repo: https://github.com/45Drives/cockpit-zfs-manager.git
