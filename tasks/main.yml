@@ -72,3 +72,7 @@
     name: '{{ cockpit_service }}'
     state: started
     enabled: true
+
+- name: Get certificate from IPA server
+  ansible.builtin.include_tasks: ipa-cert.yml
+  when: cockpit_ipa_cert
