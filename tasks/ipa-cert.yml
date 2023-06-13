@@ -1,0 +1,21 @@
+---
+- name: Check if ipa-getcert is installed
+  ansible.builtin.shell:
+    cmd: command -v ipa-getcert >/dev/null 2>&1
+  register: ipa_getcert_exist
+  changed_when: false
+  ignore_errors: yes
+
+- name: Create IPA managed TLS certificate
+  ansible.builtin.command:
+    cmd: >
+      ipa-getcert request
+      -f /etc/cockpit/ws-certs.d/{{ ansible_fqdn }}.cert
+      -k /etc/cockpit/ws-certs.d/{{ ansible_fqdn }}.key
+      -D {{ ansible_fqdn }}
+      -K host/{{ ansible_fqdn }}
+      -m 0640 -o root:cockpit-ws
+      -M 0644 -O root:root
+    creates: /etc/cockpit/ws-certs.d/{{ ansible_fqdn }}.cert
+  changed_when: false
+  when: not ipa_getcert_exist.failed

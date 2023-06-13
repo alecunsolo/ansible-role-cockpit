@@ -30,7 +30,12 @@ cockpit_podman_enabled: false
 cockpit_machines_enabled: false
 cockpit_zfs_enabled: false
 ```
-Cockpit packages to be instralled.
+Cockpit packages to be installed.
+
+```yaml
+cockpit_ipa_cert: false
+```
+Whether to attempt to get TLS certificate from IPA server or not.
 
 ```yaml
 cockpit_override_systemd: false

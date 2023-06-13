@@ -7,3 +7,4 @@ cockpit_networkmanager_enabled: false
 cockpit_zfs_enabled: false
 cockpit_override_systemd: false
 cockpit_override_src: cockpit-default-override.socket.j2
+cockpit_ipa_cert: false
